@@ -13,18 +13,15 @@ import com.android.volley.RequestQueue;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonArrayRequest;
-import com.android.volley.toolbox.JsonObjectRequest;
 import com.android.volley.toolbox.Volley;
 
 import org.json.JSONArray;
 import org.json.JSONException;
-import org.json.JSONObject;
 
 public class MainActivity extends AppCompatActivity implements View.OnClickListener {
 
     private RequestQueue queue;
     private String server;
-    private Tribe[] tribes;
     private Resources res;
 
     private Button loadButton;
@@ -57,14 +54,14 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                             tryLoadTribes(response);
                         }
                         catch (JSONException exception){
-                            loadButton.setText("Parsing failed");
+                            loadButton.setText(res.getString(R.string.parsing_error));
                         }
                     }
                 },
                 new Response.ErrorListener() {
                     @Override
                     public void onErrorResponse(VolleyError error) {
-                        loadButton.setText("Loading failed");
+                        loadButton.setText(res.getString(R.string.loading_error));
                     }
                 }
             );
@@ -73,10 +70,11 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
     public void tryLoadTribes(JSONArray response_tribes) throws JSONException {
         int amount_tribes = response_tribes.length();
-        tribes = new Tribe[amount_tribes];
+        Tribe[] tribes = new Tribe[amount_tribes];
         for (int i = 0; i < amount_tribes; i++) {
             tribes[i] = new Tribe(response_tribes.getJSONObject(i));
         }
+        loadButton.setText(String.format("Loaded tribes starting with%s", tribes[0].getTribeName()));
     }
 
     @Override
