@@ -4,7 +4,7 @@ from matplotlib import pyplot as plt
 import random
 
 from terrain import Terrain
-
+from soldier import Soldier
 
 class Tribe:
     def __init__(self):
